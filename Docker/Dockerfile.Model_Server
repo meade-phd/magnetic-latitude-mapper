@@ -1,0 +1,35 @@
+FROM php:8.3-fpm-alpine AS php-server
+
+# Set the working directory:
+WORKDIR /root
+
+# Up until the gfortran line, these are utility
+# packages mostly just useful for development:
+RUN apk add --no-cache         \
+    bash                       \
+    nano                       \
+    ack                        \
+    curl                       \
+    wget                       \
+    net-tools                  \
+    iputils-ping               \
+    gfortran                   \
+    g++                        \
+    make                       \
+    cmake                      \
+    unzip                   && \
+    rm -rf /var/cache/apk/*
+ 
+# ADD in the WMM2025 files
+COPY WMM/wmm2025_Linux_CLI.zip /root
+
+# Build WMM2025 (modified UI supporting CLI)
+RUN unzip wmm2025_Linux_CLI.zip && \
+    rm wmm2025_Linux_CLI.zip    && \
+    cd wmm2025_Linux            && \
+    make clean                  && \
+    make wmm                    && \
+    cd ..                       && \
+    cp wmm2025_Linux/build/wmm_ptcli /var/www/html/MagLatCalc && \
+    cp wmm2025_Linux/build/WMM.COF /var/www/html && \
+    rm -rf wmm2025_Linux

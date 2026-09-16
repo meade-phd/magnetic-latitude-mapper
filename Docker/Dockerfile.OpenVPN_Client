@@ -1,0 +1,22 @@
+FROM alpine:latest
+
+# Set the working directory:
+WORKDIR /root
+
+# Except for openvpn, these are all utility
+# packages for convenience in development:
+RUN apk add --no-cache         \
+    bash                       \
+    nano                       \
+    ack                        \
+    curl                       \
+    wget                       \
+    net-tools                  \
+    iputils-ping               \
+    openvpn                 && \
+    rm -rf /var/cache/apk/*
+
+ADD OpenVPN/vpn_startup.sh /root
+
+# Start the container startup script (starts a persistent process so the container will also be persistent):
+CMD ["/root/vpn_startup.sh"]

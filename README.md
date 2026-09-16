@@ -1,2 +1,2 @@
 # magnetic-latitude-mapper
-Applies World Magnetic Model 2025 to Google Maps Display
+Applies World Magnetic Model (WMM2025) Magnetic Latitude Calculation to Google Maps Display

@@ -1,0 +1,41 @@
+networks:
+  app-net-maglat:
+
+services:
+  vpn-client:
+    image: openvpn-client-maglat:latest
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - /dev/log:/dev/log
+      - ../OpenVPN/openvpn-client.conf:/etc/openvpn/client/openvpn-client.conf
+    networks:
+      - app-net-maglat
+    healthcheck:
+      test: ["CMD", "curl", "-f", "10.128.28.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  nginx-server:
+    image: nginx-server-maglat:latest
+    volumes:
+      - ../NGINX/index.html:/usr/share/nginx/html/index.html
+      - ../NGINX/default.conf:/etc/nginx/conf.d/default.conf:ro
+    network_mode: "service:vpn-client"
+    depends_on:
+      vpn-client:
+        condition: service_started
+      model-server:
+        condition: service_started
+    restart: unless-stopped
+
+  model-server:
+    image: model-server-maglat:latest
+    volumes:
+      - ../WMM/index.php:/var/www/html/index.php
+      - ../WMM/MagLatIfx.php:/var/www/html/MagLatIfx.php
+    networks:
+      - app-net-maglat
+    restart: unless-stopped

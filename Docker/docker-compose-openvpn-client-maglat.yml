@@ -1,0 +1,6 @@
+services:
+  vpn:
+    build:
+      context: ..
+      dockerfile: ./Docker/Dockerfile.OpenVPN_Client
+    image: openvpn-client-maglat

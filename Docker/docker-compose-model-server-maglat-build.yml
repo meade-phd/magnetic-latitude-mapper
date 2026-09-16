@@ -1,0 +1,6 @@
+services:
+  model-server:
+    build:
+      context: ..
+      dockerfile: ./Docker/Dockerfile.Model_Server
+    image: model-server-maglat

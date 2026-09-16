@@ -1,0 +1,6 @@
+services:
+  vpn:
+    build:
+      context: ..
+      dockerfile: ./Docker/Dockerfile.NGINX_Server
+    image: nginx-server-maglat

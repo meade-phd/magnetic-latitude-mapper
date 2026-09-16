@@ -1,0 +1,16 @@
+FROM nginx:alpine
+
+# Set the working directory:
+WORKDIR /root
+
+# These are all nice-to-have components
+# for the development cycle:
+RUN apk add --no-cache         \
+    bash                       \
+    nano                       \
+    ack                        \
+    curl                       \
+    wget                       \
+    net-tools                  \
+    iputils-ping            && \
+    rm -rf /var/cache/apk/*
